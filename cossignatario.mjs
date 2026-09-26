@@ -8372,6 +8372,7 @@ function criarBatimento(op) {
       linha = await op.armazem.ler(epoca);
       if (!linha) return "sem_proposta";
     }
+    if (op.soPropoe) return "aguardando_compromissos";
     let proposta;
     try {
       const bruto = JSON.parse(linha.proposta);
@@ -8609,6 +8610,7 @@ function criarBatimentoDoSentinela(op) {
     armazem,
     montarProposta,
     conferir,
+    soPropoe: op.soPropoe,
     aoRecusar: (epoca, motivo) => {
       op.log("warn", "batimento: proposta recusada por este sentinela", { epoca, motivo });
       void op.aoRecusar?.(epoca, motivo);
