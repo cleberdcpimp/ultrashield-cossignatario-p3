@@ -1,0 +1,17 @@
+name: manter-vivo
+# O GitHub desliga workflows agendados de repositorio publico apos 60 dias sem atividade. Um commit a cada ~2 semanas mantem o cossignatario agendado. Sem segredos.
+on:
+  schedule: [{ cron: '17 4 1,15 * *' }]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  batimento:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git config user.name "manter-vivo"
+          git config user.email "manter-vivo@users.noreply.github.com"
+          git commit --allow-empty -q -m "manter-vivo $(date -u +%F)"
+          git push -q

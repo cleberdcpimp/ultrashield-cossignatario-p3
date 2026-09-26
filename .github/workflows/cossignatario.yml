@@ -1,0 +1,30 @@
+name: cossignatario-p3
+# Cossignatario da PARTE 3 da chave do batimento (FROST 2-de-3). O agendamento do GitHub e "melhor esforco": o job fica vivo ~54 min e assina a cada 5 min por dentro;
+# o cron so precisa reinicia-lo. A concorrencia garante UM unico processo com a parte 3 por vez (duas copias simultaneas invalidariam a assinatura).
+# Sem pull_request / pull_request_target: nenhum codigo de fora roda aqui com segredos.
+on:
+  schedule: [{ cron: '*/15 * * * *' }]
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: cossignatario-p3
+  cancel-in-progress: false
+jobs:
+  cossignar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 58
+    steps:
+      - uses: actions/checkout@v4
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: cossignar a cada epoca (sem imprimir segredos)
+        env:
+          PARTE_SELADA: ${{ secrets.PARTE_SELADA }}
+          PARTE_SENHA: ${{ secrets.PARTE_SENHA }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          CODIGOS_ACEITOS: 3912cf2cf8528e6b1003d62895118b582f64201c0927058f038169675921cade
+          CANAL: principal
+          ID: gh-cossig
+          DURACAO_MIN: '54'
+        run: node cossignatario.mjs
