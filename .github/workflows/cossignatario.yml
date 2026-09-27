@@ -23,7 +23,7 @@ jobs:
           PARTE_SELADA: ${{ secrets.PARTE_SELADA }}
           PARTE_SENHA: ${{ secrets.PARTE_SENHA }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          CODIGOS_ACEITOS: 3912cf2cf8528e6b1003d62895118b582f64201c0927058f038169675921cade,72625388258e2fe6fb8e77048d6d6000e772519609dba11d51548bcc37ea941f
+          CODIGOS_ACEITOS: 72625388258e2fe6fb8e77048d6d6000e772519609dba11d51548bcc37ea941f
           CANAL: principal
           ID: gh-cossig
           DURACAO_MIN: '54'
