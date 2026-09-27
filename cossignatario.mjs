@@ -8779,8 +8779,8 @@ var require_runner = __commonJS({
         if (Date.now() - ultimaBatida < 3e4) return;
         ultimaBatida = Date.now();
         try {
-          await consulta(`INSERT INTO shield_sentinelas (id, versao, modo, batimento) VALUES ($1, 'cossig-nuvem', 'cossignatario', true)
-        ON CONFLICT (id) DO UPDATE SET ultimo_sinal = now(), versao = 'cossig-nuvem', modo = 'cossignatario', batimento = true`, [ID]);
+          await consulta(`INSERT INTO shield_sentinelas (id, versao, modo, batimento) VALUES ($1, 'cossig-nuvem', 'cossig', true)
+        ON CONFLICT (id) DO UPDATE SET ultimo_sinal = now(), versao = 'cossig-nuvem', modo = 'cossig', batimento = true`, [ID]);
         } catch (e) {
           nota("sinal de vida falhou: " + limpar(e instanceof Error ? e.message : String(e)).slice(0, 120));
         }
