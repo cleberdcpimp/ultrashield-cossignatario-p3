@@ -8774,6 +8774,17 @@ var require_runner = __commonJS({
         log: (nivel, msg, extra) => nota(`${nivel}: ${msg} ${extra ? JSON.stringify(extra) : ""}`)
       });
       await bat.sincronizarRelogio();
+      let ultimaBatida = 0;
+      async function batida() {
+        if (Date.now() - ultimaBatida < 3e4) return;
+        ultimaBatida = Date.now();
+        try {
+          await consulta(`INSERT INTO shield_sentinelas (id, versao, modo, batimento) VALUES ($1, 'cossig-nuvem', 'cossignatario', true)
+        ON CONFLICT (id) DO UPDATE SET ultimo_sinal = now(), versao = 'cossig-nuvem', modo = 'cossignatario', batimento = true`, [ID]);
+        } catch (e) {
+          nota("sinal de vida falhou: " + limpar(e instanceof Error ? e.message : String(e)).slice(0, 120));
+        }
+      }
       const inicio = Date.now();
       let ticks = 0, erros = 0, ultimoErro = null;
       const gravarEstado = () => writeFileSync("estado.json", JSON.stringify({ id: ID, canal: CANAL, em: (/* @__PURE__ */ new Date()).toISOString(), epoca: bat.epocaAgora(), ticks, erros, ultimoErro }) + "\n");
@@ -8781,6 +8792,7 @@ var require_runner = __commonJS({
       for (; ; ) {
         const s = Date.now() / 1e3;
         const fase = s - Math.floor(s / INTERVALO_S) * INTERVALO_S;
+        await batida();
         if (fase < JANELA_S) {
           try {
             await atualizarVisao();
